@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Animated } from 'react-native';
 import sample from 'lodash/sample';
 import indexOf from 'lodash/indexOf';
 import each from 'lodash/each';
@@ -83,49 +83,65 @@ export default class App extends React.Component {
         soundObject.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate);
         playSoundFromStart();
     }
-  render() {
-    const { isLoaded, positionMillis, isPlaying, durationMillis } = this.state;
-    const isComplete = positionMillis === durationMillis;
-    const isPaused = !isComplete && !isPlaying;
+    render() {
+        const { isLoaded, positionMillis, isPlaying, durationMillis } = this.state;
+        const isComplete = positionMillis === durationMillis;
+        const isPaused = !isComplete && !isPlaying;
 
-    const status = isComplete ? 'done' : (
-        isPlaying ? 'playing' : 'paused'
-    );
+        // const status = isComplete ? 'done' : (
+        //     isPlaying ? 'playing' : 'paused'
+        // );
 
-    return (
-      <View style={styles.container}>
-          {!isLoaded &&
-            <Text>Loading...</Text>
-          }
-          {isLoaded &&
-          <Fragment>
-              {!isComplete &&
-              <Fragment>
-                  <Text>Progress: {positionMillis} / {durationMillis}</Text>
-                  {isPlaying && <Button title="PAUSE" onPress={pauseAudio}/>}
-                  {isPaused && <Button title="RESUME" onPress={resumeAudio}/>}
-              </Fragment>
-              }
-              {isComplete &&
-              <Fragment>
-                  <Button title="PLAY ANOTHER" onPress={this.playRandomSound}/>
-              </Fragment>
-              }
-              <Text>Status: {status}</Text>
-          </Fragment>
-          }
-      </View>
-    );
-  }
+        return (
+            <View style={styles.container}>
+                <View style={styles.centerPoint}>
+                    <View style={styles.content}>
+                        {isLoaded &&
+                            <Fragment>
+                                {!isComplete &&
+                                    <Fragment>
+                                        {isPlaying && <TouchableOpacity style={styles.bigButton} onPress={pauseAudio}/>}
+                                        {isPaused && <TouchableOpacity style={styles.bigButton} onPress={resumeAudio}/>}
+                                    </Fragment>
+                                }
+                                {isComplete &&
+                                    <TouchableOpacity style={styles.bigButton} onPress={this.playRandomSound}/>
+                                }
+                            </Fragment>
+                        }
+                    </View>
+                </View>
+            </View>
+        );
+    }
 }
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#ACE',
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    centerPoint: {
+        position: 'relative',
+        height: 0,
+        width: 0,
+    },
+    content: {
+      position: 'absolute',
+    },
+    bigButton: {
+        backgroundColor: '#fff',
+        borderRadius: 140/2,
+        width: 140,
+        height: 140,
+        position: 'absolute',
+        top: -140/2,
+        left: -140/2,
+    }
 });
 
 // animation notes

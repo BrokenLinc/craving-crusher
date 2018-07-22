@@ -65,3 +65,6 @@ typings/
 
 # Private assets
 assets/private
+
+# Expo
+.expo
