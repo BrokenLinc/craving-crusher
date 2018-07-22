@@ -1,8 +1,22 @@
 import React, { Fragment } from 'react';
-import { StyleSheet, TouchableOpacity, View, Animated } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import sample from 'lodash/sample';
 import indexOf from 'lodash/indexOf';
 import each from 'lodash/each';
+import { LinearGradient } from 'expo';
+
+const IMAGE = {
+    PLAY: require('./assets/play.png'),
+    PAUSE: require('./assets/pause.png'),
+    WAVES1: require('./assets/waves-1.png'),
+    WAVES2: require('./assets/waves-2.png'),
+};
+
+const COLOR = {
+    PINK: '#DAB4B9',
+    BEIGE: '#FFF6EB',
+    BLUE: '#789FB8',
+};
 
 const SOUNDS = [
     { file: require('./assets/private/andrea.mp3') },
@@ -94,22 +108,39 @@ export default class App extends React.Component {
 
         return (
             <View style={styles.container}>
-                <View style={styles.centerPoint}>
-                    <View style={styles.content}>
-                        {isLoaded &&
-                            <Fragment>
-                                {!isComplete &&
-                                    <Fragment>
-                                        {isPlaying && <TouchableOpacity style={styles.bigButton} onPress={pauseAudio}/>}
-                                        {isPaused && <TouchableOpacity style={styles.bigButton} onPress={resumeAudio}/>}
-                                    </Fragment>
-                                }
-                                {isComplete &&
-                                    <TouchableOpacity style={styles.bigButton} onPress={this.playRandomSound}/>
-                                }
-                            </Fragment>
-                        }
+                <LinearGradient
+                    colors={[ COLOR.PINK, COLOR.BEIGE ]}
+                    style={styles.background}
+                />
+                <View style={styles.scene}>
+                    <View style={styles.anchor}>
+                        <View style={styles.sun} />
                     </View>
+                    <View style={styles.anchor2}>
+                        <Image style={styles.waves2} source={IMAGE.WAVES2} />
+                        <Image style={styles.waves1} source={IMAGE.WAVES1} />
+                    </View>
+                </View>
+                <View style={styles.content}>
+                    {isLoaded &&
+                        <Fragment>
+                            {!isComplete &&
+                                <Fragment>
+                                    {isPlaying && <TouchableOpacity style={styles.bigButton} onPress={pauseAudio}>
+                                        <Image resizeMode="stretch" style={styles.icon} source={IMAGE.PAUSE} />
+                                    </TouchableOpacity>}
+                                    {isPaused && <TouchableOpacity style={styles.bigButton} onPress={resumeAudio}>
+                                        <Image resizeMode="stretch" style={styles.icon} source={IMAGE.PLAY} />
+                                    </TouchableOpacity>}
+                                </Fragment>
+                            }
+                            {isComplete &&
+                                <TouchableOpacity style={styles.bigButton} onPress={this.playRandomSound}>
+                                    <Image resizeMode="stretch" style={styles.icon} source={IMAGE.PLAY} />
+                                </TouchableOpacity>
+                            }
+                        </Fragment>
+                    }
                 </View>
             </View>
         );
@@ -120,35 +151,78 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ACE',
         position: 'relative',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: COLOR.BLUE,
     },
-    centerPoint: {
-        position: 'relative',
-        height: 0,
-        width: 0,
+    background: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '60%',
     },
     content: {
-      position: 'absolute',
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: '50%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    scene: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    anchor: {
+        height: 0,
+        width: 0,
+        position: 'relative',
+    },
+    anchor2: {
+        height: 0,
+        width: '100%',
+        position: 'relative',
+    },
+    sun: {
+        width: 162,
+        height: 162,
+        borderRadius: 162/2,
+        backgroundColor: COLOR.BEIGE,
+        position: 'absolute',
+        top: -162/2,
+        left: -162/2,
+    },
+    waves1: {
+        position: 'absolute',
+        width: '200%',
+        top: 30,
+
+    },
+    waves2: {
+        position: 'absolute',
+        width: '300%',
+        top: -25,
     },
     bigButton: {
-        backgroundColor: '#fff',
-        borderRadius: 140/2,
-        width: 140,
-        height: 140,
-        position: 'absolute',
-        top: -140/2,
-        left: -140/2,
+        borderWidth: 2,
+        borderColor: '#fff',
+        borderStyle: 'solid',
+        borderRadius: 96/2,
+        width: 96,
+        height: 96,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    icon: {
+        width: 48,
+        height: 48,
     }
 });
-
-// animation notes
-// heart rate rhythm
-// or breathing rhythm, in... out...
-// hypnotic but not disorienting
-// sin waves, pulsing
-// ripples like a pond
-// idea: particles, not moving but pulsing in size
-// idea: background cycles through a few pastel colors
