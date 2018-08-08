@@ -8,8 +8,6 @@ import { LinearGradient } from 'expo';
 const IMAGE = {
     PLAY: require('./assets/play.png'),
     PAUSE: require('./assets/pause.png'),
-    WAVES1: require('./assets/waves-1.png'),
-    WAVES2: require('./assets/waves-2.png'),
 };
 
 const COLOR = {
@@ -109,18 +107,9 @@ export default class App extends React.Component {
         return (
             <View style={styles.container}>
                 <LinearGradient
-                    colors={[ COLOR.PINK, COLOR.BEIGE ]}
-                    style={styles.background}
+                    colors={[ COLOR.PINK, COLOR.BLUE ]}
+                    style={styles.gradient}
                 />
-                <View style={styles.scene}>
-                    <View style={styles.anchor}>
-                        <View style={styles.sun} />
-                    </View>
-                    <View style={styles.anchor2}>
-                        <Image style={styles.waves2} source={IMAGE.WAVES2} />
-                        <Image style={styles.waves1} source={IMAGE.WAVES1} />
-                    </View>
-                </View>
                 <View style={styles.content}>
                     {isLoaded &&
                         <Fragment>
@@ -152,64 +141,22 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         position: 'relative',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLOR.BLUE,
     },
-    background: {
+    gradient: {
         position: 'absolute',
         left: 0,
         right: 0,
         top: 0,
-        height: '60%',
+        bottom: 0,
     },
     content: {
         position: 'absolute',
         left: 0,
         right: 0,
         bottom: 0,
-        height: '50%',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    scene: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
         top: 0,
-        bottom: 0,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    anchor: {
-        height: 0,
-        width: 0,
-        position: 'relative',
-    },
-    anchor2: {
-        height: 0,
-        width: '100%',
-        position: 'relative',
-    },
-    sun: {
-        width: 162,
-        height: 162,
-        borderRadius: 162/2,
-        backgroundColor: COLOR.BEIGE,
-        position: 'absolute',
-        top: -162/2,
-        left: -162/2,
-    },
-    waves1: {
-        position: 'absolute',
-        width: '200%',
-        top: 30,
-
-    },
-    waves2: {
-        position: 'absolute',
-        width: '300%',
-        top: -25,
     },
     bigButton: {
         borderWidth: 2,
