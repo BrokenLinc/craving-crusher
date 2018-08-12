@@ -1,35 +1,15 @@
 import React, { Fragment } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
 import sample from 'lodash/sample';
 import indexOf from 'lodash/indexOf';
-import each from 'lodash/each';
 import { LinearGradient } from 'expo';
 
-const IMAGE = {
-    PLAY: require('./assets/play.png'),
-    PAUSE: require('./assets/pause.png'),
-};
-
-const COLOR = {
-    PINK: '#DAB4B9',
-    BEIGE: '#FFF6EB',
-    BLUE: '#789FB8',
-};
-
-const SOUNDS = [
-    { file: require('./assets/private/andrea.mp3') },
-    { file: require('./assets/private/danny.mp3') },
-    { file: require('./assets/private/logan.mp3') },
-    { file: require('./assets/private/magbic.mp3') },
-];
+import COLOR from './constants/color';
+import SOUNDS from './constants/sounds';
+import { PauseIcon, PlayIcon } from "./components/icons";
+import Wave1 from './components/Wave1';
 
 const RECENT_SOUND_BUFFER_SIZE = 3; // must be less than SOUNDS.length
-
-each(SOUNDS, async (sound) => {
-    sound.object = new Expo.Audio.Sound();
-    await sound.object.loadAsync(sound.file);
-    await sound.object.setProgressUpdateIntervalAsync(30);
-});
 
 const loadRandomSound = () => {
     let newSound = sample(SOUNDS);
@@ -100,9 +80,7 @@ export default class App extends React.Component {
         const isComplete = positionMillis === durationMillis;
         const isPaused = !isComplete && !isPlaying;
 
-        // const status = isComplete ? 'done' : (
-        //     isPlaying ? 'playing' : 'paused'
-        // );
+        const { height, width } = Dimensions.get('window');
 
         return (
             <View style={styles.container}>
@@ -110,22 +88,24 @@ export default class App extends React.Component {
                     colors={[ COLOR.PINK, COLOR.BLUE ]}
                     style={styles.gradient}
                 />
+                <Wave1 height={height/2} width={width*2} style={{top: '65%', opacity: 0.2}} duration={15500} />
+                <Wave1 height={height/2} width={width*2} style={{top: '71%', opacity: 0.4}} duration={5500}/>
                 <View style={styles.content}>
                     {isLoaded &&
                         <Fragment>
                             {!isComplete &&
                                 <Fragment>
                                     {isPlaying && <TouchableOpacity style={styles.bigButton} onPress={pauseAudio}>
-                                        <Image resizeMode="stretch" style={styles.icon} source={IMAGE.PAUSE} />
+                                        <PauseIcon />
                                     </TouchableOpacity>}
                                     {isPaused && <TouchableOpacity style={styles.bigButton} onPress={resumeAudio}>
-                                        <Image resizeMode="stretch" style={styles.icon} source={IMAGE.PLAY} />
+                                        <PlayIcon />
                                     </TouchableOpacity>}
                                 </Fragment>
                             }
                             {isComplete &&
                                 <TouchableOpacity style={styles.bigButton} onPress={this.playRandomSound}>
-                                    <Image resizeMode="stretch" style={styles.icon} source={IMAGE.PLAY} />
+                                    <PlayIcon />
                                 </TouchableOpacity>
                             }
                         </Fragment>
